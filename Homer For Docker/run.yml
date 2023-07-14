@@ -1,0 +1,34 @@
+- hosts: localhost
+  gather_facts:  yes
+  vars:
+    - ansible_python_interpreter: /usr/bin/python3
+  become: yes
+  become_method: sudo
+  tasks:
+
+  - name: Update Ubuntu
+    apt: update_cache=yes force_apt_get=yes upgrade=yes cache_valid_time=3600
+
+  - name: Pull Homer Image from Docker Hub
+    docker_image:
+      name: b4bz/homer
+      source: pull
+
+  - name: Create Homer Container
+    docker_container:
+      name: Homer
+      image: b4bz/homer
+      state: started
+      restart_policy: always
+      ports:
+        - "8080:8080"
+      volumes:
+        - /home/user/Homer:/www/assets
+      env_file: /home/user/Homer/specs.env # Create a dot ENV file with INIT_ASSETS=1
+      user: "1000:1000"
+
+  - name: Open Port for Homer
+    ufw:
+      rule: allow
+      port: 8080
+      proto: tcp
