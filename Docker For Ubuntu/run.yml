@@ -1,0 +1,54 @@
+---
+- hosts: localhost
+  gather_facts:  yes
+  vars:
+    - ansible_python_interpreter: /usr/bin/python3
+  become: yes
+  become_method: sudo
+  tasks:
+
+  - name: Update Ubuntu
+    apt: update_cache=yes force_apt_get=yes upgrade=yes cache_valid_time=3600
+
+  - name: Install Required System Packages
+    apt:
+      pkg:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+
+  # Docker Setup
+  - name: Add Docker GPG Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository To Apt
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu bionic stable
+      state: present
+
+  - name: Install Docker
+    apt:
+      name: "{{ item }}"
+      state: latest
+      update_cache: yes
+    loop:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+  - name: Start and Enable Docker
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: Install Docker Python Module
+    pip:
+      name: docker
+      state: present
