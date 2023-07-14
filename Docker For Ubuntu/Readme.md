@@ -6,3 +6,8 @@ This guide provides step-by-step instructions for installing Docker using Ansibl
 Ubuntu 20.04 or a newer version installed on the target machine.
 Ansible installed on the control machine.
 
+## Contributing
+If you find any issues with this Ansible playbook or have suggestions for improvements, please feel free to open an issue or submit a pull request on the GitHub repository.
+
+# License
+This Ansible playbook is licensed under the MIT License.
