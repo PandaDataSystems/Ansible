@@ -27,8 +27,6 @@
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /home/user/Portainer:/data
-      env_file:
-        - /home/user/Portainer/specs.env
 
   - name: Open Portainer Port
     ufw:
