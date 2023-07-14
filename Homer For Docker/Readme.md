@@ -1,4 +1,4 @@
-![](https://i.imgur.com/OxbN2BK.png)
+![](https://i.imgur.com/4RgGOU7.png)
 ## Homer Installation with Ansible for Ubuntu 20.04+
 This guide provides step-by-step instructions for installing Homer, a self-hosted dashboard for your bookmarks, links, notes, and more, using Ansible on Ubuntu 20.04 and newer versions. Ansible is an open-source automation tool that simplifies the configuration management and deployment of software.
 
