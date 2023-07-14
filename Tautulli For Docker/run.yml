@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  gather_facts:  yes
+  vars:
+    - ansible_python_interpreter: /usr/bin/python3
+  become: yes
+  become_method: sudo
+  tasks:
+
+  - name: Update Ubuntu
+    apt: update_cache=yes force_apt_get=yes upgrade=yes cache_valid_time=3600
+
+# Tautulli Setup
+  - name: Pull Tautulli Image from Docker Hub
+    docker_image:
+      name: linuxserver/tautulli
+      source: pull
+  
+  - name: Create Tautulli Container
+    docker_container:
+      name: Tautulli
+      image: linuxserver/tautulli
+      state: started
+      restart_policy: always
+      ports:
+        - "8181:8181"
+      volumes:
+        - /home/plex/tautulli:/config
