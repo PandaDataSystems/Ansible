@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  gather_facts:  yes
+  vars:
+    - ansible_python_interpreter: /usr/bin/python3
+  become: yes
+  become_method: sudo
+  tasks:
+
+  - name: Update Ubuntu
+    apt: update_cache=yes force_apt_get=yes upgrade=yes cache_valid_time=3600
+
+  # Portainer Setup
+  - name: Pull Portainer Image from Docker Hub
+    docker_image:
+      name: portainer/portainer-ce
+      source: pull
+  
+  - name: Create Portainer Container
+    docker_container:
+      name: Portainer
+      image: portainer/portainer-ce
+      state: started
+      restart_policy: always
+      ports:
+        - "9000:9000"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /home/user/Portainer:/data
+      env_file:
+        - /home/user/Portainer/specs.env
+
+  - name: Open Portainer Port
+    ufw:
+      rule: allow
+      port: 9000
+      proto: tcp
